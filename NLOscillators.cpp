@@ -254,7 +254,7 @@ void Duffing_Ctor(Duffing* unit){
 
 
 // the load function is called by the host when the plug-in is loaded
-PluginLoad(NLOscillators)
+PluginLoad(NLOscillators) {
   ft = inTable;
   DefineSimpleUnit(VanDerPol);
   DefineSimpleUnit(Duffing);
