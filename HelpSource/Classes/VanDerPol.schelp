@@ -1,11 +1,20 @@
-TITLE:: van der Pol Oscillator
-summary:: van der Pol chaotic generator
+TITLE:: VanDerPol
+summary:: van der Pol Oscillator
 categories:: UGens>Generators>Chaotic
+related:: Classes/Duffing
 
 Implements the van der Pol equation (see e.g. http://en.wikipedia.org/wiki/Van_der_Pol_oscillator), via L. Putnam's runge-kutta solver,
 
+	code::
+	x' = y
+	y' = e(1-x^2)x' - x + a in(0)
+	::
+
 Originally by Oswald Berthold.
 
+classmethods::
+
+method::ar
 
 argument:: drv
 driving signal
@@ -18,6 +27,8 @@ damping parameter
 
 argument:: a
 coupling parameter for input
+
+argument:: h
 
 argument:: xi
 initial x value (x0)
