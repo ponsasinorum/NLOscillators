@@ -1,6 +1,6 @@
 ## NLOscillator ##
 
-Van der Pol and Duffing oscillator UGens. Forked from [SWUGens](http://www2.informatik.hu-berlin.de/~oberthol/SWUGens-0.01/) by Oswald Berthold.
+Van der Pol and Duffing oscillator UGens. Forked from [NLOscs](https://www2.informatik.hu-berlin.de/~bertolos/NLOscs/) by Oswald Berthold.
 
 ## Installation
 

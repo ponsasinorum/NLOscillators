@@ -32,7 +32,7 @@ struct Duffing : public NonLinear {
   double frac;
 };
 
-// declare unit generator functions 
+// declare unit generator functions
 extern "C"
 {
   void load(InterfaceTable *inTable);
@@ -56,14 +56,14 @@ void VanDerPol_next(VanDerPol *unit, int inNumSamples)
   double h = ZIN0(4);
   double x0 = ZIN0(5);
   double y0 = ZIN0(6);
-	
+
   double xn = unit->xn;
   double yn = unit->yn;
   float counter = unit->counter;
   double xnm1 = unit->xnm1;
   double ynm1 = unit->ynm1;
   double frac = unit->frac;
-	
+
   float samplesPerCycle;
   double slope;
   if(freq < unit->mRate->mSampleRate){
@@ -81,10 +81,10 @@ void VanDerPol_next(VanDerPol *unit, int inNumSamples)
     unit->x0 = xn = x0;
     unit->y0 = yn = y0;
   }
-	
+
   double dx = xn - xnm1;
   double dy = yn - ynm1;
-	
+
   for (int i=0; i<inNumSamples; ++i) {
     if(counter >= samplesPerCycle){
       counter -= samplesPerCycle;
@@ -92,22 +92,22 @@ void VanDerPol_next(VanDerPol *unit, int inNumSamples)
 
       xnm1 = xn;
       ynm1 = yn;
-			
-      double k1x, k2x, k3x, k4x, 
-	k1y, k2y, k3y, k4y, 
+
+      double k1x, k2x, k3x, k4x,
+	k1y, k2y, k3y, k4y,
 	kxHalf, kyHalf;
-			
+
       // 4th order Runge-Kutta approximate solution for differential equations
       k1x = h * ynm1;
       k1y = h * (e*ynm1*(1 - pow(xnm1, 2)) - xnm1 + (a * ZXP(drv)));
       kxHalf = k1x * 0.5;
       kyHalf = k1y * 0.5;
-			
+
       k2x = h * (ynm1 + kyHalf);
       k2y = h * (e*(ynm1 + kyHalf)*(1 - pow(xnm1-kxHalf, 2)) - (xnm1+kxHalf) + (a * ZXP(drv)));
       kxHalf = k2x * 0.5;
       kyHalf = k2y * 0.5;
-			
+
       k3x = h * (ynm1 + kyHalf);
       k3y = h * (e*(ynm1 + kyHalf)*(1 - pow(xnm1-kxHalf, 2)) - (xnm1+kxHalf) + (a * ZXP(drv)));
 
@@ -116,7 +116,7 @@ void VanDerPol_next(VanDerPol *unit, int inNumSamples)
 
       xn = xn + (k1x + 2.0*(k2x + k3x) + k4x) * ONESIXTH;
       yn = yn + (k1y + 2.0*(k2y + k3y) + k4y) * ONESIXTH;
-			
+
       dx = xn - xnm1;
       dy = yn - ynm1;
     }
@@ -125,7 +125,7 @@ void VanDerPol_next(VanDerPol *unit, int inNumSamples)
     ZXP(yout) = (ynm1 + dy * frac) * 0.5f;
     frac += slope;
   }
-	
+
   unit->xn = xn;
   unit->yn = yn;
   unit->counter = counter;
@@ -136,12 +136,12 @@ void VanDerPol_next(VanDerPol *unit, int inNumSamples)
 
 void VanDerPol_Ctor(VanDerPol* unit){
   SETCALC(VanDerPol_next);
-	
+
   unit->x0 = unit->xn = unit->xnm1 = ZIN0(5);
   unit->y0 = unit->yn = unit->ynm1 = ZIN0(6);
   unit->counter = 0.f;
   unit->frac = 0.f;
-	
+
   VanDerPol_next(unit, 1);
 }
 
@@ -160,14 +160,14 @@ void Duffing_next(Duffing *unit, int inNumSamples)
   double h = ZIN0(6);
   double x0 = ZIN0(7);
   double y0 = ZIN0(8);
-	
+
   double xn = unit->xn;
   double yn = unit->yn;
   float counter = unit->counter;
   double xnm1 = unit->xnm1;
   double ynm1 = unit->ynm1;
   double frac = unit->frac;
-	
+
   float samplesPerCycle;
   double slope;
   if(freq < unit->mRate->mSampleRate){
@@ -185,10 +185,10 @@ void Duffing_next(Duffing *unit, int inNumSamples)
     unit->x0 = xn = x0;
     unit->y0 = yn = y0;
   }
-	
+
   double dx = xn - xnm1;
   double dy = yn - ynm1;
-	
+
   for (int i=0; i<inNumSamples; ++i) {
     if(counter >= samplesPerCycle){
       counter -= samplesPerCycle;
@@ -197,8 +197,8 @@ void Duffing_next(Duffing *unit, int inNumSamples)
       xnm1 = xn;
       ynm1 = yn;
 
-      double k1x, k2x, k3x, k4x, 
-	k1y, k2y, k3y, k4y, 
+      double k1x, k2x, k3x, k4x,
+	k1y, k2y, k3y, k4y,
 	kxHalf, kyHalf;
 
       // 4th order Runge-Kutta approximate solution for differential equations
@@ -206,12 +206,12 @@ void Duffing_next(Duffing *unit, int inNumSamples)
       k1y = h * (-delta*ynm1 - alpha*xnm1 - beta*pow(xnm1, 3) + (gamma * ZXP(drv)));
       kxHalf = k1x * 0.5;
       kyHalf = k1y * 0.5;
-			
+
       k2x = h * (ynm1 + kyHalf);
       k2y = h * (-delta*(ynm1 + kyHalf) - alpha*(xnm1+kxHalf) - beta*pow(xnm1+kxHalf, 3) + (gamma * ZXP(drv)));
       kxHalf = k2x * 0.5;
       kyHalf = k2y * 0.5;
-			
+
       k3x = h * (ynm1 + kyHalf);
       k3y = h * (-delta*(ynm1 + kyHalf) - alpha*(xnm1+kxHalf) - beta*pow(xnm1+kxHalf, 3) + (gamma * ZXP(drv)));
 
@@ -220,7 +220,7 @@ void Duffing_next(Duffing *unit, int inNumSamples)
 
       xn = xn + (k1x + 2.0*(k2x + k3x) + k4x) * ONESIXTH;
       yn = yn + (k1y + 2.0*(k2y + k3y) + k4y) * ONESIXTH;
-			
+
       dx = xn - xnm1;
       dy = yn - ynm1;
     }
@@ -229,7 +229,7 @@ void Duffing_next(Duffing *unit, int inNumSamples)
     ZXP(yout) = (ynm1 + dy * frac) * 0.5f;
     frac += slope;
   }
-	
+
   unit->xn = xn;
   unit->yn = yn;
   unit->counter = counter;
@@ -240,12 +240,12 @@ void Duffing_next(Duffing *unit, int inNumSamples)
 
 void Duffing_Ctor(Duffing* unit){
   SETCALC(Duffing_next);
-	
+
   unit->x0 = unit->xn = unit->xnm1 = ZIN0(5);
   unit->y0 = unit->yn = unit->ynm1 = ZIN0(6);
   unit->counter = 0.f;
   unit->frac = 0.f;
-	
+
   Duffing_next(unit, 1);
 }
 
@@ -254,8 +254,7 @@ void Duffing_Ctor(Duffing* unit){
 
 
 // the load function is called by the host when the plug-in is loaded
-void load(InterfaceTable *inTable)
-{
+PluginLoad(NLOscillators)
   ft = inTable;
   DefineSimpleUnit(VanDerPol);
   DefineSimpleUnit(Duffing);
