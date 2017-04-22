@@ -1,0 +1,70 @@
+TITLE:: van der Pol Oscillator
+summary:: van der Pol chaotic generator
+categories:: UGens>Generators>Chaotic
+
+Implements the van der Pol equation (see e.g. http://en.wikipedia.org/wiki/Van_der_Pol_oscillator), via L. Putnam's runge-kutta solver,
+
+Originally by Oswald Berthold.
+
+
+argument:: drv
+driving signal
+
+argument:: freq
+iteration frequency in hertz
+
+argument:: e
+damping parameter
+
+argument:: a
+coupling parameter for input
+
+argument:: xi
+initial x value (x0)
+
+argument:: yi
+initial y value (y0)
+
+argument:: mul
+as usual
+
+argument:: add
+s.a.
+
+EXAMPLES::
+code::
+
+// basic test
+{VanDerPol.ar(drv: SinOsc.ar(1), freq: 22050, e: 0.1, a: 0, h: 0.05, xi: 0.1, yi: 0)}.play
+
+(// explore params with mouse
+{Out.ar(0, Pan2.ar(
+        VanDerPol.ar(drv: SinOsc.ar(1.0), freq: 44100, e: MouseX.kr(0, 5.0), a: MouseY.kr(0, 2.5), h: 0.05, xi: 0.1, yi: 0, mul: 0.1);
+))}.play
+)
+
+// set params
+(
+SynthDef(\vdp, {|freq(22050), mfreq(1), e(0.1), a(0.0), amp(0.1)|
+        var vdp = VanDerPol.ar(drv: SinOsc.ar(mfreq), freq: freq, e: e, a: a, h: 0.05, xi: 0.1, yi: 0, mul: amp);
+        Out.ar(0, vdp);
+}).store;
+)
+
+(// explore parameter space
+var pat, num;
+num = 50;
+pat = Pmono(\vdp,
+        \freq, s.sampleRate,
+        \mfreq, Pseq(
+                [Pseq([1.0], num),
+                        Pseries(1.0, 0.1, num)], 1),
+        \e, Pseq([Pseries(0.1, 0.1, num)], 2),
+        \a, Pseq([Pseq([0.0], num), Pseries(0.0, 0.1, num+1)], 2),
+        \amp, 0.1,
+        //\amp, 1.0,
+        \dur, Pseq([1/3], 3*num)
+);
+pat.play;
+)
+::
